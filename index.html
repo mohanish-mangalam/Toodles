@@ -14,7 +14,7 @@ text-align:center;
 overflow:hidden;
 }
 
-/* Floating hearts */
+/* Floating hearts background */
 
 .bgHeart{
 position:fixed;
@@ -29,7 +29,7 @@ z-index:-1;
 100%{transform:translateY(-100vh);opacity:0}
 }
 
-/* Start Screen */
+/* Start screen */
 
 #startScreen{
 position:fixed;
@@ -85,11 +85,43 @@ margin-top:10px;
 font-size:18px;
 }
 
+/* Owl */
+
+#owl{
+position:fixed;
+bottom:20px;
+right:20px;
+font-size:60px;
+cursor:pointer;
+}
+
+#owlBubble{
+position:fixed;
+bottom:100px;
+right:20px;
+background:white;
+padding:15px;
+border-radius:20px;
+display:none;
+font-size:18px;
+max-width:220px;
+}
+
+/* Shinchan */
+
+#shinchan{
+position:fixed;
+bottom:25px;
+left:20px;
+width:70px;
+display:none;
+}
+
 /* Proposal */
 
 .proposal{
 display:none;
-margin-top:40px;
+margin-top:60px;
 }
 
 .proposalButtons{
@@ -115,27 +147,6 @@ color:white;
 background:#777;
 color:white;
 position:relative;
-}
-
-/* Owl */
-
-#owl{
-position:fixed;
-bottom:20px;
-right:20px;
-font-size:60px;
-}
-
-#owlBubble{
-position:fixed;
-bottom:100px;
-right:20px;
-background:white;
-padding:15px;
-border-radius:20px;
-display:none;
-font-size:18px;
-max-width:220px;
 }
 
 /* Shiva */
@@ -190,6 +201,8 @@ to{opacity:0;transform:translateY(-20px);}
 
 <div class="gallery" id="gallery"></div>
 
+<img id="shinchan">
+
 <div class="proposal" id="proposal">
 
 <h2 id="proposalText"></h2>
@@ -227,7 +240,6 @@ document.body.appendChild(heart)
 setTimeout(()=>heart.remove(),8000)
 },400)
 
-
 /* Gallery setup */
 
 let captions=[
@@ -244,24 +256,41 @@ let captions=[
 ]
 
 let gallery=document.getElementById("gallery")
-
 gallery.innerHTML='<div class="galleryTrack" id="track"></div>'
-
 let track=document.getElementById("track")
 
 for(let i=1;i<=10;i++){
-
 track.innerHTML+=`
-
 <div class="photo-card">
 <img src="photo${i}.jpg">
 <div class="caption">${captions[i-1]}</div>
 </div>
-
 `
-
 }
 
+/* Owl speech */
+
+function showOwl(text){
+let bubble=document.getElementById("owlBubble")
+bubble.innerText=text
+bubble.style.display="block"
+setTimeout(()=>bubble.style.display="none",6000)
+}
+
+/* Shinchan appearance */
+
+function showShinchan(image,text){
+
+let shin=document.getElementById("shinchan")
+
+shin.src=image
+shin.style.display="block"
+
+showOwl(text)
+
+setTimeout(()=>shin.style.display="none",5000)
+
+}
 
 /* Start */
 
@@ -277,31 +306,13 @@ showOwl("Hoot hoot Toodles… swipe the memories ❤️")
 
 }
 
-
-/* Owl */
-
-function showOwl(text){
-
-let bubble=document.getElementById("owlBubble")
-
-bubble.innerText=text
-
-bubble.style.display="block"
-
-setTimeout(()=>bubble.style.display="none",6000)
-
-}
-
-
 /* Swipe gallery */
 
 let current=0
 let startX=0
 
 gallery.addEventListener("touchstart",(e)=>{
-
 startX=e.touches[0].clientX
-
 })
 
 gallery.addEventListener("touchend",(e)=>{
@@ -313,43 +324,28 @@ if(endX-startX>50) prev()
 
 })
 
-
 function next(){
-
 if(current<9){
-
 current++
-
 updateGallery()
-
 }
-
 }
 
 function prev(){
-
 if(current>0){
-
 current--
-
 updateGallery()
-
 }
-
 }
-
 
 function updateGallery(){
 
 track.style.transform="translateX(-"+current*100+"%)"
 
-if(current==2)
-showOwl("This was a fun day 🥹")
+if(current==3)
+showShinchan("shinchan_rose.png","Arre wah romance chal raha hai!")
 
-if(current==5)
-showOwl("You looked very cute here")
-
-if(current==8)
+if(current==7)
 showOwl("Almost at the important question...")
 
 if(current==9)
@@ -357,44 +353,36 @@ showProposal()
 
 }
 
-
-/* Proposal typing */
+/* Proposal */
 
 function showProposal(){
 
 gallery.style.display="none"
 
+showShinchan("shinchan_shocked.png","Mujhe sab pata hai… proposal hone wala hai!")
+
 document.getElementById("proposal").style.display="block"
 
 typeProposal()
 
-showOwl("Toodles… ek important sawaal hai ❤️")
-
 }
-
 
 function typeProposal(){
 
 let text="Will you marry me? 💍"
 
 let i=0
-
 let target=document.getElementById("proposalText")
 
 let typing=setInterval(()=>{
-
 target.innerHTML+=text[i]
-
 i++
-
 if(i==text.length) clearInterval(typing)
-
 },80)
 
 }
 
-
-/* Escaping No button */
+/* No button escape */
 
 let noBtn=document.getElementById("noBtn")
 
@@ -410,12 +398,9 @@ if(!activated){
 
 activated=true
 noBtn.style.position="fixed"
-
 escape()
 
-}
-
-else{
+}else{
 
 escape()
 
@@ -427,41 +412,40 @@ function escape(){
 
 attempts++
 
+showShinchan("shinchan_naughty.png","Aap shaadi se bhaag rahi ho? Hehehe!")
+
 let x=Math.random()*(window.innerWidth-120)
 let y=Math.random()*(window.innerHeight-120)
 
 noBtn.style.left=x+"px"
 noBtn.style.top=y+"px"
 
-if(attempts==3)
-showOwl("Ma’am… destiny is buffering.")
-
 if(attempts==4){
 
 document.getElementById("shivaContainer").style.display="block"
-
 showOwl("Bhagwan bhi keh rahe hain…")
 
 }
 
-if(attempts==5)
-noBtn.innerText="Accha baba thoda sochti hu"
+if(attempts==6){
+
+showOwl("Nice try… ye button actually kaam hi nahi karta 😌")
 
 }
 
+}
 
-/* YES button */
+/* Yes button */
 
 document.getElementById("yesBtn").onclick=function(){
 
-showOwl("HOOT HOOT! Shaadi pakki! ❤️")
+showShinchan("shinchan_dance.png","Shaadi! Shaadi! Shaadi!")
 
 document.getElementById("wedding").style.display="block"
 
 confetti()
 
 }
-
 
 /* Heart explosion */
 
@@ -476,12 +460,29 @@ div.className="heart"
 div.innerHTML="❤️"
 
 div.style.left=Math.random()*window.innerWidth+"px"
-
 div.style.top=Math.random()*window.innerHeight+"px"
 
 document.body.appendChild(div)
 
 setTimeout(()=>div.remove(),1000)
+
+}
+
+}
+
+/* Owl Easter Egg */
+
+let owlClicks=0
+
+document.getElementById("owl").onclick=function(){
+
+owlClicks++
+
+if(owlClicks==3){
+
+showOwl("He practiced this proposal 27 times.")
+
+owlClicks=0
 
 }
 
