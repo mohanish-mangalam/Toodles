@@ -257,7 +257,7 @@ let gallery=document.getElementById("gallery")
 gallery.innerHTML='<div class="galleryTrack" id="track"></div>'
 let track=document.getElementById("track")
 
-for(let i=0;i<=8;i++){
+for(let i=1;i<=8;i++){
 track.innerHTML+=`
 <div class="photo-card">
 <img src="photo${i}.png">
@@ -323,7 +323,7 @@ if(endX-startX>50) prev()
 })
 
 function next(){
-if(current<9){
+if(current<7){
 current++
 updateGallery()
 }
@@ -490,6 +490,7 @@ owlClicks=0
 
 </body>
 </html>
+
 
 
 
