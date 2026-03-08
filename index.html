@@ -125,7 +125,7 @@ margin-top:60px;
 }
 
 .proposalButtons{
-display:flex;
+display:none;
 justify-content:center;
 gap:15px;
 margin-top:20px;
@@ -243,7 +243,7 @@ setTimeout(()=>heart.remove(),8000)
 /* Gallery setup */
 
 let captions=[
-  "Let's try and see where it goes",
+"Let's try and see where it goes",
 "I promise I will learn to tie my shoelaces better so that you never have to wait for me in the middle of the road😌",
 "I promise I will polish my flirting skills and add all kinds of flavours to it so that you don't have to be non-chalant",
 "I promise to be by your side with strength & honour through the 'Ups & Downs' of the journey we call Life",
@@ -373,9 +373,20 @@ let i=0
 let target=document.getElementById("proposalText")
 
 let typing=setInterval(()=>{
+
 target.innerHTML+=text[i]
 i++
-if(i==text.length) clearInterval(typing)
+
+if(i==text.length){
+
+clearInterval(typing)
+
+setTimeout(()=>{
+document.querySelector(".proposalButtons").style.display="flex"
+},800)
+
+}
+
 },80)
 
 }
@@ -388,7 +399,9 @@ let attempts=0
 let activated=false
 
 noBtn.addEventListener("mouseover",activateEscape)
-noBtn.addEventListener("touchstart",activateEscape)
+noBtn.addEventListener("touchstart",(e)=>{
+e.preventDefault()
+activateEscape()
 
 function activateEscape(){
 
@@ -487,14 +500,5 @@ owlClicks=0
 }
 
 </script>
-
 </body>
 </html>
-
-
-
-
-
-
-
-
