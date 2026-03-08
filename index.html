@@ -14,7 +14,7 @@ text-align:center;
 overflow:hidden;
 }
 
-/* Floating hearts background */
+/* Floating hearts */
 
 .bgHeart{
 position:fixed;
@@ -173,7 +173,7 @@ max-width:350px;
 border-radius:20px;
 }
 
-/* Heart explosion */
+/* Hearts */
 
 .heart{
 position:fixed;
@@ -199,7 +199,9 @@ to{opacity:0;transform:translateY(-20px);}
 <source src="romantic.mp3" type="audio/mpeg">
 </audio>
 
-<div class="gallery" id="gallery"></div>
+<div class="gallery" id="gallery">
+<div class="galleryTrack" id="track"></div>
+</div>
 
 <img id="shinchan">
 
@@ -253,8 +255,6 @@ let captions=[
 "I promise I will make honest efforts to resolve any disagreements/arguements/misunderstandings that might come our way, try and be creative about my solutions and most importantly, not wait for long periods to do so",
 ]
 
-let gallery=document.getElementById("gallery")
-gallery.innerHTML='<div class="galleryTrack" id="track"></div>'
 let track=document.getElementById("track")
 
 for(let i=1;i<=8;i++){
@@ -275,7 +275,7 @@ bubble.style.display="block"
 setTimeout(()=>bubble.style.display="none",7000)
 }
 
-/* Shinchan appearance */
+/* Shinchan */
 
 function showShinchan(image,text){
 
@@ -294,26 +294,32 @@ setTimeout(()=>shin.style.display="none",6000)
 
 document.getElementById("startBtn").onclick=function(){
 
+try{
 document.getElementById("music").play()
+}catch(e){}
 
 document.getElementById("startScreen").style.display="none"
-
-gallery.style.display="block"
+document.getElementById("gallery").style.display="block"
 
 showOwl("Hoot hoot Toodles… swipe to see the 7 promises❤️ of an underdog!")
 
 }
 
-/* Swipe gallery */
+/* Swipe */
 
 let current=0
 let startX=0
+let swipeLock=false
+
+let gallery=document.getElementById("gallery")
 
 gallery.addEventListener("touchstart",(e)=>{
 startX=e.touches[0].clientX
 })
 
 gallery.addEventListener("touchend",(e)=>{
+
+if(swipeLock) return
 
 let endX=e.changedTouches[0].clientX
 
@@ -323,17 +329,31 @@ if(endX-startX>50) prev()
 })
 
 function next(){
+
 if(current<7){
+
 current++
 updateGallery()
+
+swipeLock=true
+setTimeout(()=>swipeLock=false,400)
+
 }
+
 }
 
 function prev(){
+
 if(current>0){
+
 current--
 updateGallery()
+
+swipeLock=true
+setTimeout(()=>swipeLock=false,400)
+
 }
+
 }
 
 function updateGallery(){
@@ -355,7 +375,7 @@ showProposal()
 
 function showProposal(){
 
-gallery.style.display="none"
+document.getElementById("gallery").style.display="none"
 
 showShinchan("shinchan_shocked.png","Mujhe sab pata hai… proposal hone wala hai!")
 
@@ -372,12 +392,14 @@ let text="The man who would get to marry you will definitely be a lucky one. May
 let i=0
 let target=document.getElementById("proposalText")
 
+target.innerHTML=""
+
 let typing=setInterval(()=>{
 
+if(i<text.length){
 target.innerHTML+=text[i]
 i++
-
-if(i==text.length){
+}else{
 
 clearInterval(typing)
 
@@ -395,6 +417,8 @@ document.querySelector(".proposalButtons").style.display="flex"
 
 let noBtn=document.getElementById("noBtn")
 
+noBtn.addEventListener("click",(e)=>e.preventDefault())
+
 let attempts=0
 let activated=false
 
@@ -403,20 +427,15 @@ noBtn.addEventListener("touchstart",(e)=>{
 e.preventDefault()
 activateEscape()
 })
-  
+
 function activateEscape(){
 
 if(!activated){
-
 activated=true
 noBtn.style.position="fixed"
-escape()
-
-}else{
-
-escape()
-
 }
+
+escape()
 
 }
 
@@ -447,7 +466,7 @@ showOwl("Nice try… ye button actually kaam hi nahi karta 😌")
 
 }
 
-/* Yes button */
+/* Yes */
 
 document.getElementById("yesBtn").onclick=function(){
 
@@ -459,7 +478,7 @@ confetti()
 
 }
 
-/* Heart explosion */
+/* Hearts */
 
 function confetti(){
 
@@ -468,7 +487,6 @@ for(let i=0;i<200;i++){
 let div=document.createElement("div")
 
 div.className="heart"
-
 div.innerHTML="❤️"
 
 div.style.left=Math.random()*window.innerWidth+"px"
@@ -503,4 +521,3 @@ owlClicks=0
 </script>
 </body>
 </html>
-
