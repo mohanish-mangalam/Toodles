@@ -243,23 +243,20 @@ setTimeout(()=>heart.remove(),8000)
 /* Gallery setup */
 
 let captions=[
-"The day I realised you’re trouble 😌",
-"But the cute kind",
-"Our first chaotic adventure",
-"Evidence we are always laughing",
-"My favourite human",
-"The smile I want forever",
-"Every moment with you feels like magic",
-"My calm in the chaos",
-"My best friend",
-"My forever"
+"I promise I will learn to tie my shoelaces better so that you never have to wait for me in the middle of the road😌",
+"I promise I will polish my flirting skills and all kinds of flavours to it so that you don't have to be non-chalant",
+"I promise to be by your side with strength & honour through the 'Ups & Downs' of the journey we call Life",
+"....and through the 'Ebbs & Flows' of it, and make you laugh loudly at the most inappropriate of moments",
+"I promise to remember all the important dates and the very important ones; because when you're involved, nothing can be less than important to me",
+"I promise that if I ever get drunk, you will be my first and only drunk call",
+"I promise I will make honest efforts to resolve any disagreements/arguements/misunderstandings that might come our way, try and be creative about my solutions and most importantly, not wait for long periods to do so",
 ]
 
 let gallery=document.getElementById("gallery")
 gallery.innerHTML='<div class="galleryTrack" id="track"></div>'
 let track=document.getElementById("track")
 
-for(let i=1;i<=10;i++){
+for(let i=1;i<=7;i++){
 track.innerHTML+=`
 <div class="photo-card">
 <img src="photo${i}.jpg">
@@ -302,7 +299,7 @@ document.getElementById("startScreen").style.display="none"
 
 gallery.style.display="block"
 
-showOwl("Hoot hoot Toodles… swipe the memories ❤️")
+showOwl("Hoot hoot Toodles… swipe to see the 7 promises❤️ of an underdog!")
 
 }
 
@@ -342,13 +339,13 @@ function updateGallery(){
 
 track.style.transform="translateX(-"+current*100+"%)"
 
-if(current==3)
+if(current==2)
 showShinchan("shinchan_rose.png","Arre wah romance chal raha hai!")
 
-if(current==7)
+if(current==6)
 showOwl("Almost at the important question...")
 
-if(current==9)
+if(current==7)
 showProposal()
 
 }
@@ -369,7 +366,7 @@ typeProposal()
 
 function typeProposal(){
 
-let text="Will you marry me? 💍"
+let text="The man who would get to marry you will definitely be a lucky one. May I be that LUCKY ONE? 💍"
 
 let i=0
 let target=document.getElementById("proposalText")
@@ -480,7 +477,7 @@ owlClicks++
 
 if(owlClicks==3){
 
-showOwl("He practiced this proposal 27 times.")
+showOwl("The AI community humbly requests you to do something about this mad human who treats us as his slave to impress a woman, although...... a damn fine woman indeed!!")
 
 owlClicks=0
 
@@ -492,3 +489,4 @@ owlClicks=0
 
 </body>
 </html>
+
