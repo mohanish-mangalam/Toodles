@@ -282,10 +282,20 @@ track.innerHTML+=`
 /* Owl speech */
 
 function showOwl(text){
+
+let shinBubble=document.getElementById("shinchanBubble")
+
+if(shinBubble.style.display=="block"){
+setTimeout(()=>showOwl(text),2000)
+return
+}
+
 let bubble=document.getElementById("owlBubble")
 bubble.innerText=text
 bubble.style.display="block"
+
 setTimeout(()=>bubble.style.display="none",7000)
+
 }
 
 /* Shinchan speech */
@@ -294,6 +304,9 @@ function showShinchan(image,text){
 
 let shin=document.getElementById("shinchan")
 let bubble=document.getElementById("shinchanBubble")
+let owlBubble=document.getElementById("owlBubble")
+
+owlBubble.style.display="none"
 
 shin.src=image
 shin.style.display="block"
@@ -304,7 +317,7 @@ bubble.style.display="block"
 setTimeout(()=>{
 shin.style.display="none"
 bubble.style.display="none"
-},6000)
+},9000)
 
 }
 
