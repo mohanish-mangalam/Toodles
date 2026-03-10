@@ -4,6 +4,15 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Toodles ❤️</title>
 
+<!-- Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-46RXJCBMF8"></script>
+<script>
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'G-46RXJCBMF8');
+</script>
+
 <style>
 
 body{
@@ -203,7 +212,7 @@ to{opacity:0;transform:translateY(-20px);}
 <body>
 
 <div id="startScreen">
-<h2>Toodles… ready? ❤️</h2>
+<h2>Hey there!! Toodles...ready? ❤️</h2>
 <button id="startBtn">Tap to Begin 💖</button>
 </div>
 
@@ -501,6 +510,9 @@ showOwl("Nice try… ye button actually kaam hi nahi karta 😌")
 
 document.getElementById("yesBtn").onclick=function(){
 
+/* Hide NO button after YES click */
+document.getElementById("noBtn").style.display="none"
+
 showShinchan("shinchan_dance.png","Shaadi! Shaadi! Shaadi!")
 
 document.getElementById("wedding").style.display="block"
@@ -552,5 +564,3 @@ owlClicks=0
 </script>
 </body>
 </html>
-
-
