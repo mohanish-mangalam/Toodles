@@ -4,6 +4,16 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Toodles ❤️</title>
 
+<!-- Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-46RXJCBMF8"></script>
+<script>
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+
+gtag('config', 'G-46RXJCBMF8');
+</script>
+
 <style>
 
 body{
@@ -243,12 +253,6 @@ to{opacity:0;transform:translateY(-20px);}
 
 <script>
 
-/* ----------- TRACKER FUNCTION ----------- */
-
-function notifyOpen(){
-fetch("https://script.google.com/macros/s/AKfycbxrYjdm8gRZJaU-tQDH-TK6KT-EMjIhe700wzxm7hZCsfGlpR7TgCTubl85KkznesUPxA/exec");
-}
-
 /* Floating hearts */
 
 setInterval(()=>{
@@ -330,9 +334,6 @@ bubble.style.display="none"
 /* Start */
 
 document.getElementById("startBtn").onclick=function(){
-
-/* TRACK PAGE OPEN */
-notifyOpen();
 
 try{
 document.getElementById("music").play()
@@ -453,10 +454,64 @@ document.querySelector(".proposalButtons").style.display="flex"
 
 }
 
-/* YES */
+/* No button escape */
+
+let noBtn=document.getElementById("noBtn")
+
+noBtn.addEventListener("click",(e)=>e.preventDefault())
+
+let attempts=0
+let activated=false
+
+noBtn.addEventListener("mouseover",activateEscape)
+noBtn.addEventListener("touchstart",(e)=>{
+e.preventDefault()
+activateEscape()
+})
+
+function activateEscape(){
+
+if(!activated){
+activated=true
+noBtn.style.position="fixed"
+}
+
+escape()
+
+}
+
+function escape(){
+
+attempts++
+
+showShinchan("shinchan_naughty.png","Aap shaadi se bhaag rahi ho? Hehehe!")
+
+let x=Math.random()*(window.innerWidth-120)
+let y=Math.random()*(window.innerHeight-120)
+
+noBtn.style.left=x+"px"
+noBtn.style.top=y+"px"
+
+if(attempts==4){
+
+document.getElementById("shivaContainer").style.display="block"
+showOwl("Bhagwan bhi keh rahe hain…")
+
+}
+
+if(attempts==6){
+
+showOwl("Nice try… ye button actually kaam hi nahi karta 😌")
+
+}
+
+}
+
+/* Yes */
 
 document.getElementById("yesBtn").onclick=function(){
 
+/* Hide NO button after YES click */
 document.getElementById("noBtn").style.display="none"
 
 showShinchan("shinchan_dance.png","Shaadi! Shaadi! Shaadi!")
@@ -484,6 +539,24 @@ div.style.top=Math.random()*window.innerHeight+"px"
 document.body.appendChild(div)
 
 setTimeout(()=>div.remove(),1000)
+
+}
+
+}
+
+/* Owl Easter Egg */
+
+let owlClicks=0
+
+document.getElementById("owl").onclick=function(){
+
+owlClicks++
+
+if(owlClicks==3){
+
+showOwl("The AI community humbly requests you to do something about this mad human who treats us as his slave to impress a woman, although...... a damn fine woman indeed!!")
+
+owlClicks=0
 
 }
 
