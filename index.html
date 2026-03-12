@@ -1,9 +1,18 @@
 <!DOCTYPE html>
-
 <html>
 <head>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Toodles ❤️</title>
+
+<!-- Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-46RXJCBMF8"></script>
+<script>
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+
+gtag('config', 'G-46RXJCBMF8');
+</script>
 
 <style>
 
@@ -199,7 +208,6 @@ to{opacity:0;transform:translateY(-20px);}
 }
 
 </style>
-
 </head>
 
 <body>
@@ -245,14 +253,6 @@ to{opacity:0;transform:translateY(-20px);}
 
 <script>
 
-/* -------- GOOGLE SHEET TRACKER -------- */
-
-function notifyOpen(){
-fetch("https://script.google.com/macros/s/AKfycbxrYjdm8gRZJaU-tQDH-TK6KT-EMjIhe700wzxm7hZCsfGlpR7TgCTubl85KkznesUPxA/exec", {
-mode: "no-cors"
-});
-}
-
 /* Floating hearts */
 
 setInterval(()=>{
@@ -281,12 +281,12 @@ let captions=[
 let track=document.getElementById("track")
 
 for(let i=1;i<=8;i++){
-track.innerHTML+=
+track.innerHTML+=`
 <div class="photo-card">
 <img src="photo${i}.png">
 <div class="caption">${captions[i-1]}</div>
 </div>
-
+`
 }
 
 /* Owl speech */
@@ -335,9 +335,6 @@ bubble.style.display="none"
 
 document.getElementById("startBtn").onclick=function(){
 
-/* TRACK LINK OPEN */
-notifyOpen()
-
 try{
 document.getElementById("music").play()
 }catch(e){}
@@ -349,7 +346,7 @@ showOwl("Hoot hoot Toodles… swipe to see the 7 promises❤️ of an idiot who 
 
 }
 
-/* (Rest of your code remains unchanged below) */
+/* Swipe */
 
 let current=0
 let startX=0
@@ -457,10 +454,64 @@ document.querySelector(".proposalButtons").style.display="flex"
 
 }
 
+/* No button escape */
+
+let noBtn=document.getElementById("noBtn")
+
+noBtn.addEventListener("click",(e)=>e.preventDefault())
+
+let attempts=0
+let activated=false
+
+noBtn.addEventListener("mouseover",activateEscape)
+noBtn.addEventListener("touchstart",(e)=>{
+e.preventDefault()
+activateEscape()
+})
+
+function activateEscape(){
+
+if(!activated){
+activated=true
+noBtn.style.position="fixed"
+}
+
+escape()
+
+}
+
+function escape(){
+
+attempts++
+
+showShinchan("shinchan_naughty.png","Aap shaadi se bhaag rahi ho? Hehehe!")
+
+let x=Math.random()*(window.innerWidth-120)
+let y=Math.random()*(window.innerHeight-120)
+
+noBtn.style.left=x+"px"
+noBtn.style.top=y+"px"
+
+if(attempts==4){
+
+document.getElementById("shivaContainer").style.display="block"
+showOwl("Bhagwan bhi keh rahe hain…")
+
+}
+
+if(attempts==6){
+
+showOwl("Nice try… ye button actually kaam hi nahi karta 😌")
+
+}
+
+}
+
 /* Yes */
 
 document.getElementById("yesBtn").onclick=function(){
 
+/* Hide NO button after YES click */
 document.getElementById("noBtn").style.display="none"
 
 showShinchan("shinchan_dance.png","Shaadi! Shaadi! Shaadi!")
@@ -493,8 +544,24 @@ setTimeout(()=>div.remove(),1000)
 
 }
 
-</script>
+/* Owl Easter Egg */
 
+let owlClicks=0
+
+document.getElementById("owl").onclick=function(){
+
+owlClicks++
+
+if(owlClicks==3){
+
+showOwl("The AI community humbly requests you to do something about this mad human who treats us as his slave to impress a woman, although...... a damn fine woman indeed!!")
+
+owlClicks=0
+
+}
+
+}
+
+</script>
 </body>
 </html>
-
