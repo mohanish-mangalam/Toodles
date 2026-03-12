@@ -243,6 +243,21 @@ to{opacity:0;transform:translateY(-20px);}
 
 <script>
 
+  /* -------- GOOGLE SHEET + EMAIL TRACKER -------- */
+
+function notifyOpen(event="Site Opened"){
+
+let device="Desktop"
+
+if(/iPhone|iPad|iPod/i.test(navigator.userAgent)) device="iPhone"
+else if(/Android/i.test(navigator.userAgent)) device="Android"
+
+fetch("https://script.google.com/macros/s/AKfycbxrYjdm8gRZJaU-tQDH-TK6KT-EMjIhe700wzxm7hZCsfGlpR7TgCTubl85KkznesUPxA/exec?event="+event+"&device="+device,{
+mode:"no-cors"
+});
+
+}
+
 /* Floating hearts */
 
 setInterval(()=>{
@@ -325,6 +340,8 @@ bubble.style.display="none"
 
 document.getElementById("startBtn").onclick=function(){
 
+notifyOpen("Site Opened")
+  
 try{
 document.getElementById("music").play()
 }catch(e){}
@@ -472,6 +489,8 @@ escape()
 
 function escape(){
 
+notifyOpen("NO Attempt")
+  
 attempts++
 
 showShinchan("shinchan_naughty.png","Aap shaadi se bhaag rahi ho? Hehehe!")
@@ -500,6 +519,8 @@ showOwl("Nice try… ye button actually kaam hi nahi karta 😌")
 /* Yes */
 
 document.getElementById("yesBtn").onclick=function(){
+
+notifyOpen("YES Clicked")
 
 /* Hide NO button after YES click */
 document.getElementById("noBtn").style.display="none"
@@ -555,3 +576,4 @@ owlClicks=0
 </script>
 </body>
 </html>
+
