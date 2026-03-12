@@ -5,15 +5,32 @@
 <title>Toodles ❤️</title>
 
 <style>
+
 body{
 margin:0;
 font-family:'Comic Sans MS',cursive;
 background:linear-gradient(to bottom,#ffe6f2,#fff5fa);
 text-align:center;
-overflow-x:hidden;
+overflow:hidden;
 }
 
-/* Start Screen */
+/* Floating hearts */
+
+.bgHeart{
+position:fixed;
+color:#ffb3d9;
+animation:float 8s linear infinite;
+z-index:-1;
+}
+
+@keyframes float{
+0%{transform:translateY(100vh);opacity:0}
+20%{opacity:1}
+100%{transform:translateY(-100vh);opacity:0}
+}
+
+/* Start screen */
+
 #startScreen{
 position:fixed;
 width:100%;
@@ -36,68 +53,157 @@ color:white;
 }
 
 /* Gallery */
-.gallery{display:none;padding:20px;}
-.photo-card{margin:40px 0;}
+
+.gallery{
+display:none;
+overflow:hidden;
+width:100%;
+height:100vh;
+}
+
+.galleryTrack{
+display:flex;
+transition:transform 0.4s ease;
+height:100%;
+align-items:center;
+}
+
+.photo-card{
+min-width:100%;
+}
+
 .photo-card img{
-width:90%;
-max-width:320px;
+width:85%;
+max-width:340px;
 border-radius:20px;
 box-shadow:0 10px 20px rgba(0,0,0,0.2);
 }
-.caption{color:#cc0066;margin-top:10px;}
+
+.caption{
+color:#cc0066;
+margin-top:10px;
+font-size:22px;
+}
+
+/* Owl */
+
+#owl{
+position:fixed;
+bottom:20px;
+right:20px;
+font-size:60px;
+cursor:pointer;
+}
+
+#owlBubble{
+position:fixed;
+bottom:100px;
+right:20px;
+background:white;
+padding:15px;
+border-radius:20px;
+display:none;
+font-size:18px;
+max-width:220px;
+}
+
+/* Shinchan */
+
+#shinchan{
+position:fixed;
+bottom:25px;
+left:20px;
+width:70px;
+display:none;
+}
+
+#shinchanBubble{
+position:fixed;
+bottom:100px;
+left:20px;
+background:white;
+padding:15px;
+border-radius:20px;
+display:none;
+font-size:18px;
+max-width:220px;
+}
 
 /* Proposal */
-.proposal{display:none;margin-top:60px;padding-bottom:120px;}
+
+.proposal{
+display:none;
+margin-top:60px;
+}
+
+.proposalButtons{
+display:none;
+justify-content:center;
+gap:15px;
+margin-top:20px;
+}
+
 button{
 padding:15px 20px;
 font-size:16px;
 border:none;
 border-radius:25px;
-margin:10px;
 }
-#yesBtn{background:#ff66b2;color:white;}
-#noBtn{background:#777;color:white;position:absolute;}
 
-/* Owl */
-#owl{
-position:fixed;
-bottom:20px;
-right:20px;
-font-size:40px;
+#yesBtn{
+background:#ff66b2;
+color:white;
 }
-#owlBubble{
-position:fixed;
-bottom:80px;
-right:20px;
-background:white;
-padding:10px;
-border-radius:15px;
-display:none;
+
+#noBtn{
+background:#777;
+color:white;
+position:relative;
 }
 
 /* Shiva */
-#shivaContainer{display:none;margin-top:20px;}
-#shivaContainer img{width:120px;}
+
+#shivaContainer{
+display:none;
+margin-top:20px;
+}
+
+#shivaContainer img{
+width:120px;
+}
 
 /* Wedding */
-#wedding{display:none;margin-top:20px;}
-#wedding img{width:90%;max-width:350px;border-radius:20px;}
+
+#wedding{
+display:none;
+margin-top:20px;
+}
+
+#wedding img{
+width:90%;
+max-width:350px;
+border-radius:20px;
+}
+
+/* Hearts */
 
 .heart{
 position:fixed;
 color:#ff1493;
 animation:fade 1s linear forwards;
 }
+
 @keyframes fade{
 to{opacity:0;transform:translateY(-20px);}
 }
+
 </style>
 </head>
 
 <body>
 
 <div id="startScreen">
-<h2>Toodles… ready?</h2>
+<h2>Hey there!! Toodles...ready? ❤️</h2>
 <button id="startBtn">Tap to Begin 💖</button>
 </div>
 
@@ -105,12 +211,21 @@ to{opacity:0;transform:translateY(-20px);}
 <source src="romantic.mp3" type="audio/mpeg">
 </audio>
 
-<div class="gallery" id="gallery"></div>
+<div class="gallery" id="gallery">
+<div class="galleryTrack" id="track"></div>
+</div>
+
+<img id="shinchan">
+<div id="shinchanBubble"></div>
 
 <div class="proposal" id="proposal">
-<h2>Will You Marry Me? 💍</h2>
+
+<h2 id="proposalText"></h2>
+
+<div class="proposalButtons">
 <button id="yesBtn">Theek hai, kar hi leti hu</button>
 <button id="noBtn">Kabhi Nahi</button>
+</div>
 
 <div id="shivaContainer">
 <img src="shiva.png">
@@ -120,88 +235,323 @@ to{opacity:0;transform:translateY(-20px);}
 <div id="wedding">
 <img src="wedding.gif">
 </div>
+
 </div>
 
 <div id="owl">🦉</div>
 <div id="owlBubble"></div>
 
 <script>
-let gallery=document.getElementById("gallery");
-for(let i=1;i<=10;i++){
-gallery.innerHTML+=`
+
+/* Floating hearts */
+
+setInterval(()=>{
+let heart=document.createElement("div")
+heart.className="bgHeart"
+heart.innerHTML="💗"
+heart.style.left=Math.random()*window.innerWidth+"px"
+heart.style.fontSize=(10+Math.random()*20)+"px"
+document.body.appendChild(heart)
+setTimeout(()=>heart.remove(),8000)
+},400)
+
+/* Gallery setup */
+
+let captions=[
+"Mr. Imperfect trying to impress Miss Perfect. Let's see where it goes!",
+"I promise I will learn to tie my shoelaces better so that you never have to wait for me in the middle of the road😌",
+"I promise I will polish my flirting skills and add all kinds of flavours to it so that you don't have to be non-chalant",
+"I promise to be by your side with strength & honour through the 'Ups & Downs' of the journey we call Life",
+"....and through the 'Ebbs & Flows' of it, and make you laugh loudly at the most inappropriate of moments",
+"I promise to remember all the important dates and the very important ones; because when you're involved, nothing can be less than important to me",
+"I promise that if I ever get drunk, you will be my first and only drunk call",
+"I promise I will make honest efforts to resolve any disagreements/arguements/misunderstandings that might come our way, try and be creative about my solutions and most importantly, not wait for long periods to do so",
+]
+
+let track=document.getElementById("track")
+
+for(let i=1;i<=8;i++){
+track.innerHTML+=`
 <div class="photo-card">
-<img src="photo${i}.jpg">
-<div class="caption">Edit this caption ${i} 😌</div>
-</div>`;
+<img src="photo${i}.png">
+<div class="caption">${captions[i-1]}</div>
+</div>
+`
 }
 
-document.getElementById("startBtn").onclick=function(){
-document.getElementById("music").play();
-document.getElementById("startScreen").style.display="none";
-gallery.style.display="block";
-document.getElementById("proposal").style.display="block";
-showOwl("Hoot hoot Toodles… scroll slowly ❤️");
-};
+/* Owl speech */
 
 function showOwl(text){
-let bubble=document.getElementById("owlBubble");
-bubble.innerText=text;
-bubble.style.display="block";
-setTimeout(()=>bubble.style.display="none",4000);
+
+let shinBubble=document.getElementById("shinchanBubble")
+
+if(shinBubble.style.display=="block"){
+setTimeout(()=>showOwl(text),2000)
+return
 }
 
-let noBtn=document.getElementById("noBtn");
-let attempts=0;
-noBtn.style.top="70%";
-noBtn.style.left="50%";
+let bubble=document.getElementById("owlBubble")
+bubble.innerText=text
+bubble.style.display="block"
 
-noBtn.addEventListener("touchstart",escape);
-noBtn.addEventListener("mouseover",escape);
+setTimeout(()=>bubble.style.display="none",9000)
+
+}
+
+/* Shinchan speech */
+
+function showShinchan(image,text){
+
+let shin=document.getElementById("shinchan")
+let bubble=document.getElementById("shinchanBubble")
+let owlBubble=document.getElementById("owlBubble")
+
+owlBubble.style.display="none"
+
+shin.src=image
+shin.style.display="block"
+
+bubble.innerText=text
+bubble.style.display="block"
+
+setTimeout(()=>{
+shin.style.display="none"
+bubble.style.display="none"
+},9000)
+
+}
+
+/* Start */
+
+document.getElementById("startBtn").onclick=function(){
+
+try{
+document.getElementById("music").play()
+}catch(e){}
+
+document.getElementById("startScreen").style.display="none"
+document.getElementById("gallery").style.display="block"
+
+showOwl("Hoot hoot Toodles… swipe to see the 7 promises❤️ of an idiot who wants you as his partner for life!")
+
+}
+
+/* Swipe */
+
+let current=0
+let startX=0
+let swipeLock=false
+
+let gallery=document.getElementById("gallery")
+
+gallery.addEventListener("touchstart",(e)=>{
+startX=e.touches[0].clientX
+})
+
+gallery.addEventListener("touchend",(e)=>{
+
+if(swipeLock) return
+
+let endX=e.changedTouches[0].clientX
+
+if(startX-endX>50) next()
+if(endX-startX>50) prev()
+
+})
+
+function next(){
+
+if(current<7){
+
+current++
+updateGallery()
+
+swipeLock=true
+setTimeout(()=>swipeLock=false,400)
+
+}
+
+}
+
+function prev(){
+
+if(current>0){
+
+current--
+updateGallery()
+
+swipeLock=true
+setTimeout(()=>swipeLock=false,400)
+
+}
+
+}
+
+function updateGallery(){
+
+track.style.transform="translateX(-"+current*100+"%)"
+
+if(current==2)
+showShinchan("shinchan_rose.png","Arre wah romance chal raha hai!")
+
+if(current==6)
+showOwl("Almost at the important question...")
+
+if(current==7)
+showProposal()
+
+}
+
+/* Proposal */
+
+function showProposal(){
+
+document.getElementById("gallery").style.display="none"
+
+showShinchan("shinchan_shocked.png","Mujhe sab pata hai… proposal hone wala hai!")
+
+document.getElementById("proposal").style.display="block"
+
+typeProposal()
+
+}
+
+function typeProposal(){
+
+let text="The man who would get to marry you will definitely be a lucky one. May I be that LUCKY ONE? 💍"
+
+let i=0
+let target=document.getElementById("proposalText")
+
+target.innerHTML=""
+
+let typing=setInterval(()=>{
+
+if(i<text.length){
+target.innerHTML+=text[i]
+i++
+}else{
+
+clearInterval(typing)
+
+setTimeout(()=>{
+document.querySelector(".proposalButtons").style.display="flex"
+},800)
+
+}
+
+},80)
+
+}
+
+/* No button escape */
+
+let noBtn=document.getElementById("noBtn")
+
+noBtn.addEventListener("click",(e)=>e.preventDefault())
+
+let attempts=0
+let activated=false
+
+noBtn.addEventListener("mouseover",activateEscape)
+noBtn.addEventListener("touchstart",(e)=>{
+e.preventDefault()
+activateEscape()
+})
+
+function activateEscape(){
+
+if(!activated){
+activated=true
+noBtn.style.position="fixed"
+}
+
+escape()
+
+}
 
 function escape(){
-attempts++;
-let x=Math.random()*(window.innerWidth-100);
-let y=Math.random()*(window.innerHeight-100);
-noBtn.style.left=x+"px";
-noBtn.style.top=y+"px";
 
-if(attempts==3) showOwl("Ma’am… destiny is buffering.");
+attempts++
+
+showShinchan("shinchan_naughty.png","Aap shaadi se bhaag rahi ho? Hehehe!")
+
+let x=Math.random()*(window.innerWidth-120)
+let y=Math.random()*(window.innerHeight-120)
+
+noBtn.style.left=x+"px"
+noBtn.style.top=y+"px"
+
 if(attempts==4){
-document.getElementById("shivaContainer").style.display="block";
+
+document.getElementById("shivaContainer").style.display="block"
+showOwl("Bhagwan bhi keh rahe hain…")
+
 }
-if(attempts==5){
-noBtn.innerText="Accha baba thoda sochti hu";
+
+if(attempts==6){
+
+showOwl("Nice try… ye button actually kaam hi nahi karta 😌")
+
 }
+
 }
+
+/* Yes */
 
 document.getElementById("yesBtn").onclick=function(){
-document.getElementById("wedding").style.display="block";
-confetti();
-};
+
+/* Hide NO button after YES click */
+document.getElementById("noBtn").style.display="none"
+
+showShinchan("shinchan_dance.png","Shaadi! Shaadi! Shaadi!")
+
+document.getElementById("wedding").style.display="block"
+
+confetti()
+
+}
+
+/* Hearts */
 
 function confetti(){
-for(let i=0;i<150;i++){
-let div=document.createElement("div");
-div.className="heart";
-div.innerHTML="❤️";
-div.style.left=Math.random()*window.innerWidth+"px";
-div.style.top=Math.random()*window.innerHeight+"px";
-document.body.appendChild(div);
-setTimeout(()=>div.remove(),1000);
-}
+
+for(let i=0;i<200;i++){
+
+let div=document.createElement("div")
+
+div.className="heart"
+div.innerHTML="❤️"
+
+div.style.left=Math.random()*window.innerWidth+"px"
+div.style.top=Math.random()*window.innerHeight+"px"
+
+document.body.appendChild(div)
+
+setTimeout(()=>div.remove(),1000)
+
 }
 
-/* Heart trail on touch */
-document.addEventListener("touchmove",function(e){
-let heart=document.createElement("div");
-heart.className="heart";
-heart.innerHTML="💖";
-heart.style.left=e.touches[0].clientX+"px";
-heart.style.top=e.touches[0].clientY+"px";
-document.body.appendChild(heart);
-setTimeout(()=>heart.remove(),1000);
-});
+}
+
+/* Owl Easter Egg */
+
+let owlClicks=0
+
+document.getElementById("owl").onclick=function(){
+
+owlClicks++
+
+if(owlClicks==3){
+
+showOwl("The AI community humbly requests you to do something about this mad human who treats us as his slave to impress a woman, although...... a damn fine woman indeed!!")
+
+owlClicks=0
+
+}
+
+}
+
 </script>
-
 </body>
 </html>
