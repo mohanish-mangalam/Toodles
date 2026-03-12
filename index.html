@@ -1,5 +1,4 @@
 <!DOCTYPE html>
-
 <html>
 <head>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -86,6 +85,50 @@ margin-top:10px;
 font-size:22px;
 }
 
+/* Owl */
+
+#owl{
+position:fixed;
+bottom:20px;
+right:20px;
+font-size:60px;
+cursor:pointer;
+}
+
+#owlBubble{
+position:fixed;
+bottom:100px;
+right:20px;
+background:white;
+padding:15px;
+border-radius:20px;
+display:none;
+font-size:18px;
+max-width:220px;
+}
+
+/* Shinchan */
+
+#shinchan{
+position:fixed;
+bottom:25px;
+left:20px;
+width:70px;
+display:none;
+}
+
+#shinchanBubble{
+position:fixed;
+bottom:100px;
+left:20px;
+background:white;
+padding:15px;
+border-radius:20px;
+display:none;
+font-size:18px;
+max-width:220px;
+}
+
 /* Proposal */
 
 .proposal{
@@ -118,6 +161,17 @@ color:white;
 position:relative;
 }
 
+/* Shiva */
+
+#shivaContainer{
+display:none;
+margin-top:20px;
+}
+
+#shivaContainer img{
+width:120px;
+}
+
 /* Wedding */
 
 #wedding{
@@ -144,7 +198,6 @@ to{opacity:0;transform:translateY(-20px);}
 }
 
 </style>
-
 </head>
 
 <body>
@@ -162,6 +215,9 @@ to{opacity:0;transform:translateY(-20px);}
 <div class="galleryTrack" id="track"></div>
 </div>
 
+<img id="shinchan">
+<div id="shinchanBubble"></div>
+
 <div class="proposal" id="proposal">
 
 <h2 id="proposalText"></h2>
@@ -171,21 +227,29 @@ to{opacity:0;transform:translateY(-20px);}
 <button id="noBtn">Kabhi Nahi</button>
 </div>
 
+<div id="shivaContainer">
+<img src="shiva.png">
+<p>Haan bol do beti, vats tumhein sada prasann rakhega</p>
+</div>
+
 <div id="wedding">
 <img src="wedding.gif">
 </div>
 
 </div>
 
+<div id="owl">🦉</div>
+<div id="owlBubble"></div>
+
 <script>
 
-/* ---------- EMAIL + SHEET TRACKER ---------- */
+/* ----------- TRACKER FUNCTION ----------- */
 
 function notifyOpen(){
 fetch("https://script.google.com/macros/s/AKfycbxrYjdm8gRZJaU-tQDH-TK6KT-EMjIhe700wzxm7hZCsfGlpR7TgCTubl85KkznesUPxA/exec");
 }
 
-/* Floating hearts background */
+/* Floating hearts */
 
 setInterval(()=>{
 let heart=document.createElement("div")
@@ -201,13 +265,13 @@ setTimeout(()=>heart.remove(),8000)
 
 let captions=[
 "Mr. Imperfect trying to impress Miss Perfect. Let's see where it goes!",
-"I promise I will learn to tie my shoelaces better so that you never have to wait for me in the middle of the road 😌",
-"I promise I will polish my flirting skills so that you don't have to be non-chalant",
-"I promise to be by your side through the Ups & Downs of the journey we call life",
-"...and through the Ebbs & Flows of it, and make you laugh at the most inappropriate moments",
-"I promise to remember all the important dates",
-"I promise that if I ever get drunk, you will be my first drunk call",
-"I promise I will always try to resolve disagreements with honesty"
+"I promise I will learn to tie my shoelaces better so that you never have to wait for me in the middle of the road😌",
+"I promise I will polish my flirting skills and add all kinds of flavours to it so that you don't have to be non-chalant",
+"I promise to be by your side with strength & honour through the 'Ups & Downs' of the journey we call Life",
+"....and through the 'Ebbs & Flows' of it, and make you laugh loudly at the most inappropriate of moments",
+"I promise to remember all the important dates and the very important ones; because when you're involved, nothing can be less than important to me",
+"I promise that if I ever get drunk, you will be my first and only drunk call",
+"I promise I will make honest efforts to resolve any disagreements/arguements/misunderstandings that might come our way, try and be creative about my solutions and most importantly, not wait for long periods to do so",
 ]
 
 let track=document.getElementById("track")
@@ -221,11 +285,54 @@ track.innerHTML+=`
 `
 }
 
-/* Start button */
+/* Owl speech */
+
+function showOwl(text){
+
+let shinBubble=document.getElementById("shinchanBubble")
+
+if(shinBubble.style.display=="block"){
+setTimeout(()=>showOwl(text),2000)
+return
+}
+
+let bubble=document.getElementById("owlBubble")
+bubble.innerText=text
+bubble.style.display="block"
+
+setTimeout(()=>bubble.style.display="none",9000)
+
+}
+
+/* Shinchan speech */
+
+function showShinchan(image,text){
+
+let shin=document.getElementById("shinchan")
+let bubble=document.getElementById("shinchanBubble")
+let owlBubble=document.getElementById("owlBubble")
+
+owlBubble.style.display="none"
+
+shin.src=image
+shin.style.display="block"
+
+bubble.innerText=text
+bubble.style.display="block"
+
+setTimeout(()=>{
+shin.style.display="none"
+bubble.style.display="none"
+},9000)
+
+}
+
+/* Start */
 
 document.getElementById("startBtn").onclick=function(){
 
-notifyOpen()
+/* TRACK PAGE OPEN */
+notifyOpen();
 
 try{
 document.getElementById("music").play()
@@ -234,13 +341,125 @@ document.getElementById("music").play()
 document.getElementById("startScreen").style.display="none"
 document.getElementById("gallery").style.display="block"
 
+showOwl("Hoot hoot Toodles… swipe to see the 7 promises❤️ of an idiot who wants you as his partner for life!")
+
 }
 
-/* YES button */
+/* Swipe */
+
+let current=0
+let startX=0
+let swipeLock=false
+
+let gallery=document.getElementById("gallery")
+
+gallery.addEventListener("touchstart",(e)=>{
+startX=e.touches[0].clientX
+})
+
+gallery.addEventListener("touchend",(e)=>{
+
+if(swipeLock) return
+
+let endX=e.changedTouches[0].clientX
+
+if(startX-endX>50) next()
+if(endX-startX>50) prev()
+
+})
+
+function next(){
+
+if(current<7){
+
+current++
+updateGallery()
+
+swipeLock=true
+setTimeout(()=>swipeLock=false,400)
+
+}
+
+}
+
+function prev(){
+
+if(current>0){
+
+current--
+updateGallery()
+
+swipeLock=true
+setTimeout(()=>swipeLock=false,400)
+
+}
+
+}
+
+function updateGallery(){
+
+track.style.transform="translateX(-"+current*100+"%)"
+
+if(current==2)
+showShinchan("shinchan_rose.png","Arre wah romance chal raha hai!")
+
+if(current==6)
+showOwl("Almost at the important question...")
+
+if(current==7)
+showProposal()
+
+}
+
+/* Proposal */
+
+function showProposal(){
+
+document.getElementById("gallery").style.display="none"
+
+showShinchan("shinchan_shocked.png","Mujhe sab pata hai… proposal hone wala hai!")
+
+document.getElementById("proposal").style.display="block"
+
+typeProposal()
+
+}
+
+function typeProposal(){
+
+let text="The man who would get to marry you will definitely be a lucky one. May I be that LUCKY ONE? 💍"
+
+let i=0
+let target=document.getElementById("proposalText")
+
+target.innerHTML=""
+
+let typing=setInterval(()=>{
+
+if(i<text.length){
+target.innerHTML+=text[i]
+i++
+}else{
+
+clearInterval(typing)
+
+setTimeout(()=>{
+document.querySelector(".proposalButtons").style.display="flex"
+},800)
+
+}
+
+},80)
+
+}
+
+/* YES */
 
 document.getElementById("yesBtn").onclick=function(){
 
 document.getElementById("noBtn").style.display="none"
+
+showShinchan("shinchan_dance.png","Shaadi! Shaadi! Shaadi!")
 
 document.getElementById("wedding").style.display="block"
 
@@ -248,7 +467,7 @@ confetti()
 
 }
 
-/* Hearts burst */
+/* Hearts */
 
 function confetti(){
 
@@ -271,6 +490,5 @@ setTimeout(()=>div.remove(),1000)
 }
 
 </script>
-
 </body>
 </html>
